@@ -1,4 +1,4 @@
-#include <component_switch.h>
+#include <component_two_pole_switch.h>
 
 namespace component {
 
@@ -6,7 +6,7 @@ namespace component {
 // Implemented using the Bounce2 library for debouncing
 
 
-Switch::Switch(int pinNumber)
+TwoPoleSwitch::TwoPoleSwitch(int pinNumber, int pinModeValue)
 :   ComponentBase(),
     m_pinNumber(pinNumber),
     m_isOn(false),
@@ -14,7 +14,7 @@ Switch::Switch(int pinNumber)
 
 {
     // Set up the input pin
-    pinMode(m_pinNumber, INPUT_PULLUP);
+    pinMode(m_pinNumber, pinModeValue);
 
     // After setting up the button, setup the Bounce instance :
     m_debouncer.attach(m_pinNumber);
@@ -31,10 +31,10 @@ Switch::Switch(int pinNumber)
 
 }
 
-Switch::~Switch()
+TwoPoleSwitch::~TwoPoleSwitch()
 {}
 
-int Switch::getStateChange(JsonObject &jsonState)
+int TwoPoleSwitch::getStateChange(JsonObject &jsonState)
 {
 
 
@@ -59,12 +59,12 @@ int Switch::getStateChange(JsonObject &jsonState)
     return 1;
 }
 
-void Switch::getCurrentState(JsonObject &jsonState)
+void TwoPoleSwitch::getCurrentState(JsonObject &jsonState)
 {
     jsonState["state"] = m_isOn;
 }
 
-void Switch::step(JsonObject &json)
+void TwoPoleSwitch::step(JsonObject &json)
 {
     // Update the Bounce instance :
     m_debouncer.update();
@@ -87,7 +87,7 @@ void Switch::step(JsonObject &json)
     this->m_wasOn = this->m_isOn;
 }
 
-void Switch::setPinState(uint8_t state)
+void TwoPoleSwitch::setPinState(uint8_t state)
 {
     m_debouncer.setPinState(state);
 }
