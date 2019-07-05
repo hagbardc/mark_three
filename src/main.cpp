@@ -29,8 +29,8 @@ void setPinStates()
 {
     controller->readDigitalPins(inputArray, numberOfRegisters);
 
-    component_array[0]->setPinState(controller->getBitForPin(inputArray, 2));
-    component_array[1]->setPinState(controller->getBitForPin(inputArray, 3));
+    component_array[0]->setPinState(controller->getBitForPin(inputArray, 7));
+    component_array[1]->setPinState(controller->getBitForPin(inputArray, 8));
 }
 
 
@@ -49,8 +49,8 @@ void setup() {
     controller = new Mega2560();
 
     //  Setup the various components
-    component_array[0] = new Switch(2);
-    component_array[1] = new Switch(3);
+    component_array[0] = new Switch(7);
+    component_array[1] = new Switch(8);
 
 
 
