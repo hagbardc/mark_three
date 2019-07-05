@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include <component_base.h>
-#include <component_switch.h>
+#include <component_two_pole_switch.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -13,7 +13,7 @@ using namespace controller_access;
 ComponentBase **component_array;
 ControllerAccessBase *controller;
 
-int numberOfComponents = 2;
+int numberOfComponents = 4;
 int numberOfRegisters = 9;
 
 byte *inputArray;
@@ -29,8 +29,14 @@ void setPinStates()
 {
     controller->readDigitalPins(inputArray, numberOfRegisters);
 
-    component_array[0]->setPinState(controller->getBitForPin(inputArray, 2));
-    component_array[1]->setPinState(controller->getBitForPin(inputArray, 3));
+    component_array[0]->setPinState(controller->getBitForPin(inputArray, 8));
+    component_array[1]->setPinState(controller->getBitForPin(inputArray, 9));
+
+    component_array[2]->setPinState(controller->getBitForPin(inputArray, 22));
+    component_array[3]->setPinState(controller->getBitForPin(inputArray, 23));
+    //component_array[4]->setPinState(controller->getBitForPin(inputArray, 24));
+    //component_array[5]->setPinState(controller->getBitForPin(inputArray, 25));
+
 }
 
 
@@ -49,8 +55,12 @@ void setup() {
     controller = new Mega2560();
 
     //  Setup the various components
-    component_array[0] = new Switch(2);
-    component_array[1] = new Switch(3);
+    component_array[0] = new TwoPoleSwitch(8);
+    component_array[1] = new TwoPoleSwitch(9);
+    component_array[2] = new TwoPoleSwitch(22);
+    component_array[3] = new TwoPoleSwitch(23);
+    //component_array[4] = new TwoPoleSwitch(24);
+    //component_array[5] = new TwoPoleSwitch(25);
 
 
 

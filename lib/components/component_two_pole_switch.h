@@ -1,5 +1,5 @@
-#ifndef INCLUDED_COMPONENT_SWITCH_H
-#define INCLUDED_COMPONENT_SWITCH_H
+#ifndef INCLUDED_COMPONENT_TWO_POLE_SWITCH_H
+#define INCLUDED_COMPONENT_TWO_POLE_SWITCH_H
 
 #include <component_base.h>
 
@@ -10,12 +10,12 @@
 namespace component {
 
 
-class Switch : public component::ComponentBase
+class TwoPoleSwitch : public component::ComponentBase
 {
 
 public:
-    Switch(int pinNumber);
-    ~Switch();
+    TwoPoleSwitch(int pinNumber, int pinModeValue = INPUT_PULLUP);
+    ~TwoPoleSwitch();
 
     virtual int getStateChange(JsonObject &jsonState);
 
@@ -26,7 +26,7 @@ public:
     virtual void setPinState(uint8_t state);
 
 
-private:
+protected:
     Bounce m_debouncer;
     char m_stateValue[2];  //  "0" or "1" for switch off/on
     int m_pinNumber;
