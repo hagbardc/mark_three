@@ -14,12 +14,13 @@ Mega2560::Mega2560()
 :   ControllerAccessBase()
 {
     this->m_maxPinNumber = Mega2560::s_numberOfDigitalPins;
-
+    /*
     Serial.print(this->m_maxPinNumber);
     Serial.print(" is the max pin number");
     for(int ii=0; ii<Mega2560::s_numberOfDigitalPins; ++ii) {
         pinMode(ii, INPUT_PULLUP);
     }
+    */
 }
 
 Mega2560::~Mega2560()
@@ -47,6 +48,21 @@ int Mega2560::readDigitalPins(byte *inputArray, const int intputArraySize)
 
     return 0;
 }
+
+
+void Mega2560::printPinGroupings()
+{
+    Serial.print("    |-PINA-| ");
+    Serial.print("|-PINB-| ");
+    Serial.print("|-PINC-| ");
+    Serial.print("|-PIND-| ");
+    Serial.print("|-PINE-| ");
+    Serial.print("|-PINF-| ");
+    Serial.print("|-PING-| ");
+    Serial.print("|-PINH-| ");
+    Serial.println("|-PINJ-| ");
+}
+
 
 
 }

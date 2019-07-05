@@ -23,6 +23,11 @@ public:
 
     int getMaxPinNumber() { return m_maxPinNumber; }
 
+    ///  Prints out a formatted pin group to serial
+    ///  For use in association with controller_access::serialPrintByteArray
+    virtual void printPinGroupings() = 0; 
+
+
 protected:
     int m_maxPinNumber;
 };
