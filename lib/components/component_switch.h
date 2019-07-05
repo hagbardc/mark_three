@@ -23,6 +23,9 @@ public:
 
     virtual void step(JsonObject &json);
 
+    virtual void setPinState(uint8_t state);
+
+
 private:
     Bounce m_debouncer;
     char m_stateValue[2];  //  "0" or "1" for switch off/on

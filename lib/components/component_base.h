@@ -32,6 +32,9 @@ public:
     */
     virtual void step(JsonObject &json) = 0;
 
+    //  To be used by those components which can have a simple (binary) state passed in externally
+    virtual void setPinState(uint8_t state) {};
+
     void setComponentName( const char *name);
 
 protected:

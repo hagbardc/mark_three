@@ -32,8 +32,8 @@
 ////  variables)
 
 
-#ifndef Bounce2_h
-#define Bounce2_h
+#ifndef Bounce3_h
+#define Bounce3_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
@@ -158,6 +158,11 @@ class Bounce
      */
     unsigned long previousDuration();
 
+    // This allows the user to set the state of the pin externally
+    // Calling this means that any subsequent call to ::update will read
+    // the value of the state WITHOUT calling digitalRead
+    void setPinState(uint8_t state);
+
  protected:
     unsigned long previous_millis;
     uint16_t interval_millis;
@@ -180,6 +185,11 @@ class Bounce
     inline void unsetStateFlag(const uint8_t flag)  {state &= ~flag;}
     inline void toggleStateFlag(const uint8_t flag) {state ^= flag;}
     inline bool getStateFlag(const uint8_t flag)    {return((state & flag) != 0);}
+
+    // If true, we will use the library api digitalRead to establish the current
+    // state of the pin.  Else we assume that the state is set by an external
+    // entity (as for use by macros like PINA)
+    bool m_useLibraryForReadAccess;
 };
 
 #endif

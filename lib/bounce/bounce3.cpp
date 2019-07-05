@@ -13,6 +13,7 @@ Bounce::Bounce()
     , interval_millis(10)
     , state(0)
     , pin(0)
+    , m_useLibraryForReadAccess(true)
 {}
 
 void Bounce::attach(int pin) {
@@ -39,12 +40,22 @@ void Bounce::interval(uint16_t interval_millis)
     this->interval_millis = interval_millis;
 }
 
+void Bounce::setPinState(uint8_t inputState)
+{
+    m_useLibraryForReadAccess = false;
+    state = inputState;
+}
+
+
 bool Bounce::readCurrentState()
 {
-    //Serial.print("Reading state: ");
-    int val = digitalRead(pin);
-    return val;
+    if(m_useLibraryForReadAccess) {
+        return digitalRead(pin);
+    }
 
+    //  If we reach here, someone has previously called setPinState.  This
+    //  assumes the pin state will be set manually going forward
+    return state;
 }
 
 bool Bounce::update()

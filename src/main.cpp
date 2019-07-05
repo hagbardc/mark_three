@@ -25,6 +25,15 @@ unsigned long current_time;
 int readVal;
 
 
+void setPinStates()
+{
+    controller->readDigitalPins(inputArray, numberOfRegisters);
+
+    component_array[0]->setPinState(controller->getBitForPin(inputArray, 2));
+    component_array[1]->setPinState(controller->getBitForPin(inputArray, 3));
+}
+
+
 void setup() {
     // put your setup code here, to run once:
     Serial.begin(9600);
@@ -49,6 +58,7 @@ void setup() {
 
 void loop() {
 
+    setPinStates();
 
     for(int ii = 0; ii < numberOfComponents; ++ii ) {
 
@@ -59,23 +69,14 @@ void loop() {
         component_array[ii]->step(jsonObject);
 
         if(component_array[ii]->getStateChange(jsonObject)) {
-            Serial.println("We had a state change");
             serializeJson(jsonObject, Serial);
             jsonObject.clear();
+            Serial.println("");
         }
 
         component_array[ii]->getCurrentState(jsonObject);
     }
 
 
-    /*
-    readVal = digitalRead(2);
-
-    current_time = millis();
-    if( current_time > (last_execution + 500) ) {
-        Serial.println(readVal);
-        last_execution = current_time;
-    }
-    */
 
 }

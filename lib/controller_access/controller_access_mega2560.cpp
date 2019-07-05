@@ -63,6 +63,24 @@ void Mega2560::printPinGroupings()
     Serial.println("|-PINJ-| ");
 }
 
+// TODO::  Complete the implementation of this
+bool Mega2560::getBitForPin( byte *inputArray, const int pinNumber)
+{
+    byte value;
+    switch(pinNumber) {
+        case 2:
+            value = inputArray[4] >> 5;
+            break;
+        case 3:
+            value = inputArray[4] >> 5;
+            break;
+
+        default:
+            value = 0;
+    }
+    return value;
+}
+
 
 
 }

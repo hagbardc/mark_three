@@ -19,6 +19,9 @@ public:
 
     virtual void printPinGroupings();
 
+    virtual bool getBitForPin( byte *inputArray, const int pinNumber);
+
+
 
 private:
     static int s_numberOfDigitalPins;

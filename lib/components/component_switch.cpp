@@ -1,8 +1,5 @@
 #include <component_switch.h>
 
-#include <Bounce2.h>
-
-
 namespace component {
 
 //  Component for a simple switch
@@ -28,6 +25,7 @@ Switch::Switch(int pinNumber)
     m_isOn = m_debouncer.read();
     m_wasOn = m_debouncer.read();
 
+    //  Set up the component name
     sprintf(m_componentName, "switch-%02d", m_pinNumber);
 
 
@@ -52,13 +50,11 @@ int Switch::getStateChange(JsonObject &jsonState)
         strncpy(this->m_stateValue, "0", 1);
     }
 
+    //  "Element" is non-applicable:  This is only used for more complex
+    //  components that have multiple elements (like a sub panel with
+    //  multiple buttons)
     this->populateStateChange( jsonState,
-        this->m_componentName, "switch", this->m_stateValue);
-
-    Serial.print("State Change: ");
-    Serial.print(this->m_componentName);
-    Serial.print(": ");
-    Serial.println(this->m_stateValue);
+        "n/a", "switch", this->m_stateValue);
 
     return 1;
 }
@@ -83,16 +79,18 @@ void Switch::step(JsonObject &json)
     this->m_recentStateChange = true;
 
     if( ! this->m_wasOn && this->m_isOn) {
-        Serial.println("Rose");
         strncpy(this->m_stateValue, "1", 2);
     } else if( this->m_wasOn && !this->m_isOn ) {
-        Serial.println("Fell");
         strncpy(this->m_stateValue, "0", 2);
     }
 
     this->m_wasOn = this->m_isOn;
 }
 
+void Switch::setPinState(uint8_t state)
+{
+    m_debouncer.setPinState(state);
+}
 
 
 
