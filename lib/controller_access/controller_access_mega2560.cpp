@@ -69,7 +69,7 @@ bool Mega2560::getBitForPin( byte *inputArray, const int pinNumber)
     byte value;
     switch(pinNumber) {
         case 2:
-            value = inputArray[4] >> 5;
+            value = inputArray[4] >> 4;
             break;
         case 3:
             value = inputArray[4] >> 5;
