@@ -55,17 +55,12 @@ void setup() {
     controller = new Mega2560();
 
     //  Setup the various components
-<<<<<<< HEAD
-    component_array[0] = new Switch(7);
-    component_array[1] = new Switch(8);
-=======
     component_array[0] = new TwoPoleSwitch(8);
     component_array[1] = new TwoPoleSwitch(9);
     component_array[2] = new TwoPoleSwitch(22);
     component_array[3] = new TwoPoleSwitch(23);
     //component_array[4] = new TwoPoleSwitch(24);
     //component_array[5] = new TwoPoleSwitch(25);
->>>>>>> 66a2eb25056f32ff82738980444aed3d90efe775
 
 
 
