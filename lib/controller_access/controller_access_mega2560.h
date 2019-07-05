@@ -1,5 +1,5 @@
-#ifndef INCLUDED_COMPONENT_ACCESS_MEGA2560
-#define INCLUDED_COMPONENT_ACCESS_MEGA2560
+#ifndef INCLUDED_COMPONENT_ACCESS_MEGA2560_H
+#define INCLUDED_COMPONENT_ACCESS_MEGA2560_H
 
 #include <controller_access_base.h>
 
@@ -16,6 +16,12 @@ public:
 
     //  Returns 1 if there was some error reading the input array, 0 else
     virtual int readDigitalPins(byte *inputArray, const int intputArraySize);
+
+    virtual void printPinGroupings();
+
+    virtual bool getBitForPin( byte *inputArray, const int pinNumber);
+
+
 
 private:
     static int s_numberOfDigitalPins;

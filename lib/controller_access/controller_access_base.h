@@ -23,6 +23,16 @@ public:
 
     int getMaxPinNumber() { return m_maxPinNumber; }
 
+    ///  Prints out a formatted pin group to serial
+    ///  For use in association with controller_access::serialPrintByteArray
+    virtual void printPinGroupings() = 0;
+
+    /// Returns the value of the bit in the input array (as generated from a
+    /// call to readDigialPins) corresponding to the pin input for this
+    /// particular board
+    virtual bool getBitForPin( byte *inputArray, const int pinNumber) = 0;
+
+
 protected:
     int m_maxPinNumber;
 };

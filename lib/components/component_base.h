@@ -7,7 +7,7 @@ namespace component {
 
 class ComponentBase {
 public:
-    ComponentBase() { }
+    ComponentBase();
     virtual ~ComponentBase() {}
 
     /*
@@ -32,9 +32,17 @@ public:
     */
     virtual void step(JsonObject &json) = 0;
 
+    //  To be used by those components which can have a simple (binary) state passed in externally
+    virtual void setPinState(uint8_t state) {};
+
+    void setComponentName( const char *name);
+
+protected:
     /*
      * Populates the json object with information for a state change
      * Assumes that createObject() had already been called on json
+     * Used by each of the components as a helper function to interact with the
+     * JsonObject library
      *
      * @param json:  ArduinoJson json which will be populated with the change info
      * @param element:  Name of the changing element
@@ -45,7 +53,6 @@ public:
         JsonObject &json, const char* element,
         const char *action, const char *value);
 
-protected:
     bool m_recentStateChange;
     char m_componentName[20];  // Name of the component
 };
