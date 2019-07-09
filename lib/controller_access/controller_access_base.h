@@ -6,7 +6,6 @@
 namespace controller_access {
 
 
-
 // This class is intended to provide microcontroller independent
 // access to functionality (primarily and perhaps exclusively bulk
 // pin reading access)
