@@ -14,7 +14,7 @@ class TwoPoleSwitch : public component::ComponentBase
 {
 
 public:
-    TwoPoleSwitch(int pinNumber, int pinModeValue = INPUT_PULLUP);
+    TwoPoleSwitch(int pinNumber, int pinModeValue = INPUT);
     ~TwoPoleSwitch();
 
     virtual int getStateChange(JsonObject &jsonState);

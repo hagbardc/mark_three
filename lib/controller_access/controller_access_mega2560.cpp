@@ -1,7 +1,6 @@
 #include <controller_access_mega2560.h>
 
-
-#define BITS_IN_BYTE 8
+#if defined(__AVR_ATmega2560__)
 
 using namespace controller_access;
 
@@ -14,13 +13,6 @@ Mega2560::Mega2560()
 :   ControllerAccessBase()
 {
     this->m_maxPinNumber = Mega2560::s_numberOfDigitalPins;
-    /*
-    Serial.print(this->m_maxPinNumber);
-    Serial.print(" is the max pin number");
-    for(int ii=0; ii<Mega2560::s_numberOfDigitalPins; ++ii) {
-        pinMode(ii, INPUT_PULLUP);
-    }
-    */
 }
 
 Mega2560::~Mega2560()
@@ -185,3 +177,5 @@ bool Mega2560::getBitForPin( byte *inputArray, const int pinNumber)
 
 
 }
+
+#endif

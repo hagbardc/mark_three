@@ -21,6 +21,7 @@ public:
 
     virtual bool getBitForPin( byte *inputArray, const int pinNumber);
 
+    virtual int getNumberOfRegisters() { return 3; }
 
 
 private:

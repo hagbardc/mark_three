@@ -1,6 +1,8 @@
 #ifndef INCLUDED_COMPONENT_ACCESS_MEGA2560_H
 #define INCLUDED_COMPONENT_ACCESS_MEGA2560_H
 
+#if defined(__AVR_ATmega2560__)
+
 #include <controller_access_base.h>
 
 #include <Arduino.h>
@@ -21,6 +23,7 @@ public:
 
     virtual bool getBitForPin( byte *inputArray, const int pinNumber);
 
+    virtual int getNumberOfRegisters() { return 9; }
 
 
 private:
@@ -32,6 +35,5 @@ private:
 
 }
 
-
-
-#endif
+#endif  // This is the endif for:  #if defined(__AVR_ATmega2560__)
+#endif  //  This is the endif for the header include guard

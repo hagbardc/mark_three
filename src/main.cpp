@@ -14,7 +14,7 @@ using namespace controller_access;
 ComponentManager *componentManager;
 ControllerAccessBase *controller;
 
-int numberOfRegisters = 9;
+int numberOfRegisters(0);
 
 byte *inputArray;
 
@@ -45,23 +45,6 @@ void setPinStates()
         componentData->component->setPinState(pinState);
     }
 
-
-    //Serial.println(pinState);
-    /*
-    component_array[1]->setPinState(controller->getBitForPin(inputArray, 23));
-
-    component_array[2]->setPinState(controller->getBitForPin(inputArray, 24));
-    component_array[3]->setPinState(controller->getBitForPin(inputArray, 25));
-
-    component_array[4]->setPinState(controller->getBitForPin(inputArray, 26));
-    component_array[5]->setPinState(controller->getBitForPin(inputArray, 27));
-
-    component_array[6]->setPinState(controller->getBitForPin(inputArray, 28));
-    component_array[7]->setPinState(controller->getBitForPin(inputArray, 29));
-
-    component_array[8]->setPinState(controller->getBitForPin(inputArray, 7));
-    component_array[9]->setPinState(controller->getBitForPin(inputArray, 8));
-    */
 }
 
 
@@ -71,7 +54,6 @@ void setup() {
     Serial.println("Starting Setup...");
 
 
-    inputArray = new byte[numberOfRegisters];
 
     //  Allocate memory for component array
     componentManager = new ComponentManager();
@@ -80,21 +62,11 @@ void setup() {
     //  Generate a handle to the appropriate microcontroller
     controller = new Mega2560();
 
+    inputArray = new byte[controller->getNumberOfRegisters()];
+
     //  Setup the various components
-    componentManager->addComponent(new TwoPoleSwitch(27, INPUT), 27);
-    componentManager->addComponent(new TwoPoleSwitch(28, INPUT), 28);
-    /*component_array[0] = new TwoPoleSwitch(27);
-    component_array[1] = new TwoPoleSwitch(23);
-    component_array[2] = new TwoPoleSwitch(24);
-    component_array[3] = new TwoPoleSwitch(25);
-    component_array[4] = new TwoPoleSwitch(26);
-    component_array[5] = new TwoPoleSwitch(27);
-    component_array[6] = new TwoPoleSwitch(28);
-    component_array[7] = new TwoPoleSwitch(29 );
-    component_array[8] = new TwoPoleSwitch(7 );
-    component_array[9] = new TwoPoleSwitch(8 );*/
-
-
+    componentManager->addComponent(new TwoPoleSwitch(2, INPUT), 2);
+    componentManager->addComponent(new TwoPoleSwitch(3, INPUT), 3);
 
 }
 
