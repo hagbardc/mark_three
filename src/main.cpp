@@ -3,6 +3,7 @@
 #include <component_manager.h>
 #include <component_base.h>
 #include <component_two_pole_switch.h>
+#include <component_three_pole_rocker.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -65,8 +66,10 @@ void setup() {
     inputArray = new byte[controller->getNumberOfRegisters()];
 
     //  Setup the various components
-    componentManager->addComponent(new TwoPoleSwitch(2, INPUT), 2);
-    componentManager->addComponent(new TwoPoleSwitch(3, INPUT), 3);
+    componentManager->addComponent(new TwoPoleSwitch(10, INPUT_PULLUP), 10);
+    componentManager->addComponent(new TwoPoleSwitch(11, INPUT_PULLUP), 11);
+    componentManager->addComponent(new ThreePoleRocker(22), 22);
+    componentManager->addComponent(new ThreePoleRocker(23), 23);
 
 }
 
