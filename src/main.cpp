@@ -66,10 +66,14 @@ void setup() {
     inputArray = new byte[controller->getNumberOfRegisters()];
 
     //  Setup the various components
-    componentManager->addComponent(new TwoPoleSwitch(10, INPUT_PULLUP), 10);
-    componentManager->addComponent(new TwoPoleSwitch(11, INPUT_PULLUP), 11);
     componentManager->addComponent(new ThreePoleRocker(22), 22);
     componentManager->addComponent(new ThreePoleRocker(23), 23);
+    componentManager->addComponent(new ThreePoleRocker(24), 24);
+    componentManager->addComponent(new ThreePoleRocker(25), 25);
+    componentManager->addComponent(new ThreePoleRocker(26), 26);
+    componentManager->addComponent(new ThreePoleRocker(27), 27);
+    componentManager->addComponent(new ThreePoleRocker(28), 28);
+    componentManager->addComponent(new ThreePoleRocker(29), 29);
 
 }
 
