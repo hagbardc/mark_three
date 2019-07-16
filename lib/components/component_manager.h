@@ -19,7 +19,7 @@ class ComponentManager {
 public:
     // default size is the initial size of the allocated array
 
-    ComponentManager(int defaultSize = 10);
+    ComponentManager(int defaultSize = 50);
     virtual ~ComponentManager();
 
     //  Adds a component to the manager.  Returns the index of the
