@@ -39,7 +39,7 @@ void Uno::printPinGroupings()
     Serial.println("|-PIND-| ");
 }
 
-bool Uno::getBitForPin( byte *inputArray, const int pinNumber)
+bool Uno::getStateForPin( byte *inputArray, const int pinNumber)
 {
     byte value;
     switch(pinNumber) {

@@ -21,7 +21,7 @@ public:
 
     virtual void printPinGroupings();
 
-    virtual bool getBitForPin( byte *inputArray, const int pinNumber);
+    virtual bool getStateForPin( byte *inputArray, const int pinNumber);
 
     virtual int getNumberOfRegisters() { return 9; }
 

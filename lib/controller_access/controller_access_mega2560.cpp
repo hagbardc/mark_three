@@ -56,7 +56,7 @@ void Mega2560::printPinGroupings()
 }
 
 // TODO::  Complete the implementation of this
-bool Mega2560::getBitForPin( byte *inputArray, const int pinNumber)
+bool Mega2560::getStateForPin( byte *inputArray, const int pinNumber)
 {
     byte value;
     switch(pinNumber) {

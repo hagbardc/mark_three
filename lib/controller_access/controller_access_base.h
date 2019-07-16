@@ -31,7 +31,7 @@ public:
     /// Returns the value of the bit in the input array (as generated from a
     /// call to readDigitalPins) corresponding to the pin input for this
     /// particular board
-    virtual bool getBitForPin( byte *inputArray, const int pinNumber) = 0;
+    virtual bool getStateForPin( byte *inputArray, const int pinNumber) = 0;
 
     // The total number of registers (PINA, PINB, etc) we have access to
     // for a specific instance of the controller

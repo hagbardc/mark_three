@@ -42,7 +42,7 @@ void setPinStates()
 
         component_data *componentData = componentManager->getComponentDataAtIndex(componentIndex);
         int pinNumber = componentData->pinStart;
-        int pinState = controller->getBitForPin(inputArray, pinNumber);
+        int pinState = controller->getStateForPin(inputArray, pinNumber);
         componentData->component->setPinState(pinState);
     }
 
