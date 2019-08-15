@@ -24,7 +24,7 @@ ComponentManager::~ComponentManager()
     delete[] m_componentArray;
 }
 
-int ComponentManager::addComponent(ComponentBase *component, int pinStart, int pinEnd)
+int ComponentManager::addComponent(ComponentBase *component)
 {
     if(m_currentComponents >= m_componentArraySize) {
         return 0;
@@ -32,12 +32,7 @@ int ComponentManager::addComponent(ComponentBase *component, int pinStart, int p
 
     m_componentArray[m_currentComponents] = new component_data();
     m_componentArray[m_currentComponents]->component = component;
-    m_componentArray[m_currentComponents]->pinStart = pinStart;
-    m_componentArray[m_currentComponents]->pinEnd = pinStart;
 
-    if(pinEnd) {
-        m_componentArray[m_currentComponents]->pinEnd = pinEnd;
-    }
 
     int toReturn = m_currentComponents;
     ++m_currentComponents;

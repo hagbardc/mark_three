@@ -23,7 +23,7 @@ public:
 
     virtual bool getStateForPin( byte *inputArray, const int pinNumber);
 
-    virtual int getNumberOfRegisters() { return 9; }
+    virtual int getNumberOfRegisters() { return 12; }
 
 
 private:

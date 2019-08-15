@@ -35,6 +35,20 @@ public:
     //  To be used by those components which can have a simple (binary) state passed in externally
     virtual void setPinState(uint8_t state) {};
 
+    virtual int setPinStateAtIndex(int index, uint8_t state) { return 0; }
+
+    //  Returns the number of input pins supported by this component type
+    //  Used to iterate over the pins to set the pin states
+    virtual int getNumberOfPins() = 0;
+
+    // Returns pin number at the given index.  We allow our components to require
+    // multiple input pins which are not consecutive.  This will return pin number
+    // (pin on the microcontroller) for the Nth index
+    //
+    // Returns -1 if an index is requested out of bounds for this component
+
+    virtual int getPinNumberAtIndex(int index) = 0;
+
     void setComponentName( const char *name);
 
 protected:
