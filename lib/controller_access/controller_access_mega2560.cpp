@@ -36,7 +36,8 @@ int Mega2560::readDigitalPins(byte *inputArray, const int intputArraySize)
     inputArray[6] = PING;
     inputArray[7] = PINH;
     inputArray[8] = PINJ;
-    //inputArray[9] = PINK;
+    inputArray[9] = PINK;
+    inputArray[10] = PINL;
 
     return 0;
 }
@@ -52,7 +53,9 @@ void Mega2560::printPinGroupings()
     Serial.print("|-PINF-| ");
     Serial.print("|-PING-| ");
     Serial.print("|-PINH-| ");
-    Serial.println("|-PINJ-| ");
+    Serial.print("|-PINJ-| ");
+    Serial.print("|-PINK-| ");
+    Serial.println("|-PINL-| ");
 }
 
 // TODO::  Complete the implementation of this
@@ -156,6 +159,30 @@ bool Mega2560::getStateForPin( byte *inputArray, const int pinNumber)
         case 41:
             value = (inputArray[6]) >> 0 & 0x01;
             break;
+        case 42:
+            value = (inputArray[10]) >> 7 & 0x01;
+            break;
+        case 43:
+            value = (inputArray[10]) >> 6 & 0x01;
+            break;
+        case 44:
+            value = (inputArray[10]) >> 5 & 0x01;
+            break;
+        case 45:
+            value = (inputArray[10]) >> 4 & 0x01;
+            break;
+        case 46:
+            value = (inputArray[10]) >> 3 & 0x01;
+            break;
+        case 47:
+            value = (inputArray[10]) >> 2 & 0x01;
+            break;
+        case 48:
+            value = (inputArray[10]) >> 1 & 0x01;
+            break;
+        case 49:
+            value = (inputArray[10]) >> 0 & 0x01;
+            break;        
         case 50:
             value = (inputArray[1]) >> 3 & 0x01;
             break;

@@ -4,6 +4,7 @@
 #include <component_base.h>
 #include <component_two_pole_switch.h>
 #include <component_three_pole_rocker.h>
+#include <component_three_way_switch.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -35,16 +36,88 @@ void setPinStates()
 {
     controller->readDigitalPins(inputArray, numberOfRegisters);
 
+    // Iterate over the number of components, and set the pin state read from
+    // the microcontroller digital pins
     int numberOfComponents = componentManager->getNumberOfComponents();
     for( int componentIndex = 0;
         componentIndex<numberOfComponents;
         ++componentIndex ) {
 
         component_data *componentData = componentManager->getComponentDataAtIndex(componentIndex);
-        int pinNumber = componentData->pinStart;
-        int pinState = controller->getStateForPin(inputArray, pinNumber);
-        componentData->component->setPinState(pinState);
+
+        int numberOfPins = componentData->component->getNumberOfPins();
+        for(int pinIndex = 0; pinIndex < numberOfPins; ++pinIndex) {
+            int pinNumber = componentData->component->getPinNumberAtIndex(pinIndex);
+            int pinState = controller->getStateForPin(inputArray, pinNumber);
+            componentData->component->setPinStateAtIndex(pinIndex, pinState);
+        }
+
+
+
     }
+
+}
+
+void setupButtonPadArduino()
+{
+    ///  This is for the 6 3-way switches on the right side (by the 2ndary arduino)
+    int switchArray[2] = {42, 49};
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 43;  switchArray[1] = 45;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 46;  switchArray[1] = 44;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 47;  switchArray[1] = 48;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 50;  switchArray[1] = 52;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 51;  switchArray[1] = 53;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+
+}
+
+void setupCenterArduino()
+{
+    // LED Rockers
+    componentManager->addComponent(new ThreePoleRocker(22));
+    componentManager->addComponent(new ThreePoleRocker(23));
+    componentManager->addComponent(new ThreePoleRocker(24));
+    componentManager->addComponent(new ThreePoleRocker(25));
+    componentManager->addComponent(new ThreePoleRocker(26));
+    componentManager->addComponent(new ThreePoleRocker(27));
+    componentManager->addComponent(new ThreePoleRocker(28));
+    componentManager->addComponent(new ThreePoleRocker(29));
+
+    // The two extra ones on the left side, near the joystick
+    componentManager->addComponent(new ThreePoleRocker(8));
+    componentManager->addComponent(new ThreePoleRocker(9));
+
+    //  Black rectangular toggles
+    componentManager->addComponent(new TwoPoleSwitch(30, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(31, INPUT_PULLUP));
+
+    // 5-pole LED Momentary push buttons
+    componentManager->addComponent(new TwoPoleSwitch(32, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(33, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(34, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(35, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(36, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(37, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(38, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(39, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(40, INPUT_PULLUP));
+    componentManager->addComponent(new TwoPoleSwitch(41, INPUT_PULLUP));
+
+    // Blue three-way switches
+    int switchArray[2] = {42, 43};
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 44;  switchArray[1] = 45;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+    switchArray[0] = 46;  switchArray[1] = 47;
+    componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
+
+    // Key Switch
+    componentManager->addComponent(new TwoPoleSwitch(48, INPUT_PULLUP));
 
 }
 
@@ -57,7 +130,7 @@ void setup() {
 
 
     //  Allocate memory for component array
-    componentManager = new ComponentManager();
+    componentManager = new ComponentManager(60);
 
 
     //  Generate a handle to the appropriate microcontroller
@@ -65,41 +138,8 @@ void setup() {
 
     inputArray = new byte[controller->getNumberOfRegisters()];
 
-    //  Setup the various components
-
-
-    // LED Rockers
-    componentManager->addComponent(new ThreePoleRocker(22), 22);
-    componentManager->addComponent(new ThreePoleRocker(23), 23);
-    componentManager->addComponent(new ThreePoleRocker(24), 24);
-    componentManager->addComponent(new ThreePoleRocker(25), 25);
-    componentManager->addComponent(new ThreePoleRocker(26), 26);
-    componentManager->addComponent(new ThreePoleRocker(27), 27);
-    componentManager->addComponent(new ThreePoleRocker(28), 28);
-    componentManager->addComponent(new ThreePoleRocker(29), 29);
-
-    // The two extra ones on the left side, near the joystick
-    componentManager->addComponent(new ThreePoleRocker(8), 8);
-    componentManager->addComponent(new ThreePoleRocker(9), 9);
-
-    //  Black rectangular toggles
-    componentManager->addComponent(new TwoPoleSwitch(30, INPUT_PULLUP), 30);
-    componentManager->addComponent(new TwoPoleSwitch(31, INPUT_PULLUP), 31);
-
-    // 5-pole LED Momentary push buttons
-    componentManager->addComponent(new TwoPoleSwitch(32, INPUT_PULLUP), 32);
-    componentManager->addComponent(new TwoPoleSwitch(33, INPUT_PULLUP), 33);
-    componentManager->addComponent(new TwoPoleSwitch(34, INPUT_PULLUP), 34);
-    componentManager->addComponent(new TwoPoleSwitch(35, INPUT_PULLUP), 35);
-    componentManager->addComponent(new TwoPoleSwitch(36, INPUT_PULLUP), 36);
-    componentManager->addComponent(new TwoPoleSwitch(37, INPUT_PULLUP), 37);
-    componentManager->addComponent(new TwoPoleSwitch(38, INPUT_PULLUP), 38);
-    componentManager->addComponent(new TwoPoleSwitch(39, INPUT_PULLUP), 39);
-    componentManager->addComponent(new TwoPoleSwitch(40, INPUT_PULLUP), 40);
-    componentManager->addComponent(new TwoPoleSwitch(41, INPUT_PULLUP), 41);
-
-
-
+    setupCenterArduino();
+    //setupButtonPadArduino();
 }
 
 void loop() {

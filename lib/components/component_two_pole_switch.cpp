@@ -92,6 +92,25 @@ void TwoPoleSwitch::setPinState(uint8_t state)
     m_debouncer.setPinState(state);
 }
 
+int TwoPoleSwitch::setPinStateAtIndex(int index, uint8_t state)
+{
+    if(0 == index) {
+        m_debouncer.setPinState(state);
+        return 0;
+    }
+
+    return 1;
+}
+
+
+int TwoPoleSwitch::getPinNumberAtIndex(int index) {
+    if(0 == index) {
+        return m_pinNumber;
+    }
+
+    return -1;
+}
+
 
 
 

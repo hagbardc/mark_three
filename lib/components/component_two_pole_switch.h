@@ -25,6 +25,14 @@ public:
 
     virtual void setPinState(uint8_t state);
 
+    virtual int setPinStateAtIndex(int index, uint8_t state);
+
+    virtual int getNumberOfPins() { return 1; }
+
+    virtual int getPinNumberAtIndex(int index);
+
+
+
 
 protected:
     Bounce m_debouncer;

@@ -8,8 +8,6 @@ namespace component {
 
 typedef struct component_data {
     ComponentBase *component;
-    int pinStart;   //  Start of pin assignment range
-    int pinEnd;     //  End of pin assignment range
 }  component_info;
 
 
@@ -24,7 +22,7 @@ public:
 
     //  Adds a component to the manager.  Returns the index of the
     //  component (for later direct addressing, if desired)
-    int addComponent(ComponentBase *component, int pinStart, int pinEnd=0);
+    int addComponent(ComponentBase *component);
 
     component_data *getComponentDataAtIndex(int index);
     ComponentBase *getComponentAtIndex(int index);
