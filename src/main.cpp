@@ -5,6 +5,7 @@
 #include <component_two_pole_switch.h>
 #include <component_three_pole_rocker.h>
 #include <component_three_way_switch.h>
+#include <component_pot_readout.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -21,8 +22,6 @@ int numberOfRegisters(0);
 byte *inputArray;
 
 unsigned long last_execution = millis();
-unsigned long last_print = last_execution;
-unsigned long current_time;
 
 int readVal;
 
@@ -74,6 +73,9 @@ void setupButtonPadArduino()
     switchArray[0] = 51;  switchArray[1] = 53;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
+    componentManager->addComponent(new PotReadout(A0, 0x73));
+
+
 }
 
 void setupCenterArduino()
@@ -123,8 +125,8 @@ void setupCenterArduino()
 
 
 void setup() {
-    // put your setup code here, to run once:
-    Serial.begin(9600);
+
+    Serial.begin(19200);
     Serial.println("Starting Setup...");
 
 
@@ -138,12 +140,13 @@ void setup() {
 
     inputArray = new byte[controller->getNumberOfRegisters()];
 
-    setupCenterArduino();
-    //setupButtonPadArduino();
+    //setupCenterArduino();
+    setupButtonPadArduino();
 }
 
 void loop() {
 
+    last_execution = millis();
     setPinStates();
 
      for(int ii = 0; ii < componentManager->getNumberOfComponents(); ++ii ) {
@@ -153,6 +156,7 @@ void loop() {
         JsonObject jsonObject = jsonDoc.to<JsonObject>();
 
         componentManager->getComponentAtIndex(ii)->step(jsonObject);
+        componentManager->getComponentAtIndex(ii)->setCurrentTime(last_execution); 
 
         if(componentManager->getComponentAtIndex(ii)->getStateChange(jsonObject)) {
             serializeJson(jsonObject, Serial);
