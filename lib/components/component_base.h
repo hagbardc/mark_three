@@ -49,8 +49,11 @@ public:
 
     virtual int getPinNumberAtIndex(int index) = 0;
 
+    virtual void setCurrentTime(unsigned long currentTime) { m_currentTime = currentTime; }
+
     void setComponentName( const char *name);
 
+    
 protected:
     /*
      * Populates the json object with information for a state change
@@ -69,6 +72,10 @@ protected:
 
     bool m_recentStateChange;
     char m_componentName[20];  // Name of the component
+
+    // We want to be able to publish current_time directly to the 
+    // component if needed
+    unsigned long m_currentTime;
 };
 
 } // end namespace Component
