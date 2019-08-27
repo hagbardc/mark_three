@@ -58,6 +58,8 @@ private:
 
     unsigned long m_lastUpdateTime;
 
+    int m_readoutAddress;
+
 };
 
 

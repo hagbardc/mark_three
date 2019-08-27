@@ -2,15 +2,16 @@
 
 #include <Arduino.h>
 
-#define READ_SAMPLES 4
+#define READ_SAMPLES 5
 
 namespace component {
 
 PotReadout::PotReadout(int pinNumber, int readoutAddress) :
     m_pinNumber(pinNumber)
     , m_minimumIncrement(100)
+    , m_readoutAddress(readoutAddress)
 {
-    m_displayMatrix.begin(0x73);
+    m_displayMatrix.begin(m_readoutAddress);
     m_displayMatrix.print(0, DEC);
     m_displayMatrix.writeDisplay();
 
