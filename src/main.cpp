@@ -74,6 +74,7 @@ void setupButtonPadArduino()
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
     componentManager->addComponent(new PotReadout(A0, 0x73));
+    componentManager->addComponent(new PotReadout(A1, 0x74));
 
 
 }
