@@ -6,6 +6,7 @@
 #include <component_three_pole_rocker.h>
 #include <component_three_way_switch.h>
 #include <component_pot_readout.h>
+#include <component_three_light_toggle.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -30,7 +31,10 @@ int readVal;
 // components
 
 
-
+//  This reads the pins from the microcontroller in bulk, and calls appropriate apis
+//  on the associated components allowing them to handle their state modifications
+//  without taking the time to read the pin values by themselves (which can be time 
+//  consuming)
 void setPinStates()
 {
     controller->readDigitalPins(inputArray, numberOfRegisters);
@@ -44,6 +48,9 @@ void setPinStates()
 
         component_data *componentData = componentManager->getComponentDataAtIndex(componentIndex);
 
+        // Each component has a different number of pins, which may or may not be in order
+        // Here we iterate over the number of pins (as expressed by the component) and set the 
+        // state of that pin. 
         int numberOfPins = componentData->component->getNumberOfPins();
         for(int pinIndex = 0; pinIndex < numberOfPins; ++pinIndex) {
             int pinNumber = componentData->component->getPinNumberAtIndex(pinIndex);
@@ -122,6 +129,10 @@ void setupCenterArduino()
     // Key Switch
     componentManager->addComponent(new TwoPoleSwitch(48, INPUT_PULLUP));
 
+    // Missile command area
+    componentManager->addComponent(new ThreeLightToggle( 49, 2, 3, 4));
+
+
 }
 
 
@@ -141,8 +152,8 @@ void setup() {
 
     inputArray = new byte[controller->getNumberOfRegisters()];
 
-    //setupCenterArduino();
-    setupButtonPadArduino();
+    setupCenterArduino();
+    //setupButtonPadArduino();
 }
 
 void loop() {
