@@ -30,7 +30,10 @@ int readVal;
 // components
 
 
-
+//  This reads the pins from the microcontroller in bulk, and calls appropriate apis
+//  on the associated components allowing them to handle their state modifications
+//  without taking the time to read the pin values by themselves (which can be time 
+//  consuming)
 void setPinStates()
 {
     controller->readDigitalPins(inputArray, numberOfRegisters);
@@ -44,6 +47,9 @@ void setPinStates()
 
         component_data *componentData = componentManager->getComponentDataAtIndex(componentIndex);
 
+        // Each component has a different number of pins, which may or may not be in order
+        // Here we iterate over the number of pins (as expressed by the component) and set the 
+        // state of that pin. 
         int numberOfPins = componentData->component->getNumberOfPins();
         for(int pinIndex = 0; pinIndex < numberOfPins; ++pinIndex) {
             int pinNumber = componentData->component->getPinNumberAtIndex(pinIndex);
