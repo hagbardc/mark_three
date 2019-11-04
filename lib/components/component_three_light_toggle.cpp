@@ -29,7 +29,7 @@ ThreeLightToggle::ThreeLightToggle(int switch_pin,
 
     //  We can't start the system in an activated state
     if( digitalRead(m_switchPin) == HIGH ) {
-        m_componentState = ToggleMode::INVALID_MODE;
+        //m_componentState = ToggleMode::INVALID_MODE;
         m_switchPinState = 1;
     } else {
         m_componentState = ToggleMode::WAITING_MODE;
@@ -42,10 +42,10 @@ ThreeLightToggle::ThreeLightToggle(int switch_pin,
     memcpy(this->m_componentStateAsString, "\0", sizeof(this->m_componentStateAsString));
 }
 
-
-ThreeLightToggle::~ThreeLightToggle(){}
-
-
+ThreeLightToggle::~ThreeLightToggle() 
+{ 
+    delete m_switch;
+}
 void ThreeLightToggle::toggleModeAsString(ToggleMode toggleMode, char* toggleModeAsString)
 {
     if(! toggleModeAsString ){
@@ -116,7 +116,7 @@ int ThreeLightToggle::getStateChange(JsonObject &jsonState)
     this->setStringState();
 
     this->populateStateChange( jsonState,
-        "n/a", "3lighttoggle", this->m_componentStateAsString);
+        "n/a", "statechange", this->m_componentStateAsString);
 
     return 1;
 }

@@ -56,9 +56,6 @@ public:
 
     virtual void step(JsonObject &json);
 
-    // We don't implement this, since it's not coherent for the Potentiometer class
-    //virtual int setPinStateAtIndex(int index, uint8_t state);
-
     virtual void setPinState(uint8_t state);
     virtual int setPinStateAtIndex(int index, uint8_t state);
 

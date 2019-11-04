@@ -6,7 +6,7 @@ namespace component {
 
 Potentiometer::Potentiometer(int pinNumber) :
     m_pinNumber(pinNumber)
-    , m_minimumIncrement(100)
+    , m_minimumIncrement(150)
 {
 
 }
