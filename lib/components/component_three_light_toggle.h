@@ -2,6 +2,7 @@
 #define INCLUDED_COMPONENT_THREE_LIGHT_TOGGLE_H
 
 #include <component_base.h>
+#include <component_two_pole_switch.h>
 
 #include <ArduinoJson.h>
 
@@ -58,25 +59,66 @@ public:
     // We don't implement this, since it's not coherent for the Potentiometer class
     //virtual int setPinStateAtIndex(int index, uint8_t state);
 
+    virtual void setPinState(uint8_t state);
+    virtual int setPinStateAtIndex(int index, uint8_t state);
+
     virtual int getNumberOfPins() { return 1; }
 
     virtual int getPinNumberAtIndex(int index);
+
+    // Need to override this so that we can update the value of the 
+    // local switch as well
+    virtual void setCurrentTime(unsigned long currentTime);
+
 
 private:
 
     // Converts the passed in toggleMode value to a string
     static void toggleModeAsString(ToggleMode toggleMode, char* toggleModeAsString);
 
+    static unsigned long s_blinkDelay; // Length of time for a LED blink
+
     //  Looks at the current state of the system, and states the local state string appropriately
     void setStringState();
 
+    //  Progresses the action forward one step, depending on the state
+    void invalid_step();
+    void waiting_mode_step();
+    void reset_from_error_mode_step();
+    void active_mode_step();
+    void processing_mode_step();
 
-    int m_switchPin; 
+    //  Turns on/off the led at ledIndex, and updates local state member variable
+    void setLEDState(int ledIndex, int state);
+
+    //  Called when in active mode and the switch has been turned off.  Resets the local variables
+    //  and sets the LED states accordingly
+    void resetToWaitingMode();
+
+
+    TwoPoleSwitch *m_switch;
+    int m_switchPin;
+    uint8_t m_switchPinState;
+
+    // This is the state of the switch the last time .step() executed
+    uint8_t m_previousSwitchPinState;
+
     int m_pinArray[3];
     int m_pinArrayState[3];  //  The current state of the pins
 
+    // Current state of the component
     ToggleMode m_componentState;
     char m_componentStateAsString[30];
+
+    // The last time the LEDs were flipped on (in error mode).  Set to 0 if the we are not in error mode is off
+    unsigned long m_errorModeLightTimestamp;
+
+    //  The time at which the switch was turned on.  Set to 0 when the switch is turned off
+    unsigned long m_switchOnTimestamp;
+
+    unsigned long m_millisecDelay; // Number of ms between light delays
+
+
 };
 
 }

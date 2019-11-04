@@ -6,6 +6,7 @@
 #include <component_three_pole_rocker.h>
 #include <component_three_way_switch.h>
 #include <component_pot_readout.h>
+#include <component_three_light_toggle.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -128,6 +129,10 @@ void setupCenterArduino()
     // Key Switch
     componentManager->addComponent(new TwoPoleSwitch(48, INPUT_PULLUP));
 
+    // Missile command area
+    componentManager->addComponent(new ThreeLightToggle( 49, 2, 3, 4));
+
+
 }
 
 
@@ -147,8 +152,8 @@ void setup() {
 
     inputArray = new byte[controller->getNumberOfRegisters()];
 
-    //setupCenterArduino();
-    setupButtonPadArduino();
+    setupCenterArduino();
+    //setupButtonPadArduino();
 }
 
 void loop() {
