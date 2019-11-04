@@ -80,8 +80,11 @@ void setupButtonPadArduino()
     switchArray[0] = 51;  switchArray[1] = 53;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
-    componentManager->addComponent(new PotReadout(A0, 0x73));
+    //componentManager->addComponent(new PotReadout(A0, 0x73));
     componentManager->addComponent(new PotReadout(A1, 0x74));
+
+    // Toggle switch near potentiometer
+    componentManager->addComponent(new TwoPoleSwitch(6, INPUT_PULLUP));
 
 
 }
@@ -130,7 +133,20 @@ void setupCenterArduino()
     componentManager->addComponent(new TwoPoleSwitch(48, INPUT_PULLUP));
 
     // Missile command area
-    componentManager->addComponent(new ThreeLightToggle( 49, 2, 3, 4));
+    ThreeLightToggle *threeLightToggle = new ThreeLightToggle( 49, 2, 3, 4, 500);
+    threeLightToggle->setComponentName("greenToggle");
+    componentManager->addComponent(threeLightToggle);
+
+    threeLightToggle = new ThreeLightToggle( 51, 5, 6, 10, 750);
+    threeLightToggle->setComponentName("blueToggle");
+    componentManager->addComponent(threeLightToggle);
+
+    threeLightToggle = new ThreeLightToggle( 50, 11, 12, 13, 1000);
+    threeLightToggle->setComponentName("redToggle");
+    componentManager->addComponent(threeLightToggle);
+
+    // Blue LED Arcade button
+    componentManager->addComponent(new TwoPoleSwitch(7, INPUT_PULLUP));
 
 
 }
@@ -152,8 +168,8 @@ void setup() {
 
     inputArray = new byte[controller->getNumberOfRegisters()];
 
-    setupCenterArduino();
-    //setupButtonPadArduino();
+    //setupCenterArduino();
+    setupButtonPadArduino();
 }
 
 void loop() {
