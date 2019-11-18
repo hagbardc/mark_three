@@ -6,7 +6,7 @@ namespace component {
 
 Potentiometer::Potentiometer(int pinNumber) :
     m_pinNumber(pinNumber)
-    , m_minimumIncrement(100)
+    , m_minimumIncrement(45)
 {
 
 }
@@ -21,6 +21,17 @@ void Potentiometer::step(JsonObject &json)
     //
 
     int analogIntVal = analogRead(m_pinNumber);
+    this->m_currentState = analogIntVal * 6;
+    if(abs(this->m_currentState - this->m_oldState) < this->m_minimumIncrement) {
+        this->m_recentStateChange = false;
+        return;
+    }
+    this->m_recentStateChange = true;
+
+    m_oldState = this->m_currentState;
+
+    Serial.println(analogIntVal);
+    return;
 
     //  Range for analogRead appears to be [0, 4423]
     //  We want to the range to be 0 - 9999 (for the digial display)

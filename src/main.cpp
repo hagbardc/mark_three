@@ -88,11 +88,9 @@ void setupButtonPadArduino()
     potA->setComponentName("pot:A");
     componentManager->addComponent(potA);
 
-    /*
     PotReadout *potB = new PotReadout(A1, 0x74);
     potB->setComponentName("pot:B"); 
     componentManager->addComponent(potB);
-*/
 
 }
 

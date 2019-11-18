@@ -26,7 +26,7 @@ public:
     ~ButtonPad() {};
 
 
-    virtual int getStateChange(JsonObject &jsonState) { return 0;};
+    virtual int getStateChange(JsonObject &jsonState);
 
     virtual void getCurrentState(JsonObject &jsonState) {};
 
@@ -54,6 +54,12 @@ private:
     uint8_t m_colorpins[4][3];
 
     int8_t m_debounce_count[NUM_BTN_COLUMNS][NUM_BTN_ROWS];
+
+    // This refers to a button number (0 - 15)
+    // When m_recentStateChange is true, this will be the number of the 
+    // button that experienced the state change
+    int8_t m_lastChangedElement; 
+    int8_t m_lastChangedElementDown;  //  1 if down, 0 if up
 
 };
 

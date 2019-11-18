@@ -46,8 +46,6 @@ protected:
     int m_oldState;
 
     char m_stateValue[6];  // 0 - 1023
-
-    
     
 
 private:
