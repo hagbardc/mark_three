@@ -26,8 +26,8 @@ ThreeWaySwitch::ThreeWaySwitch(int pinArray[2], int pinModeValue)
         m_debouncerArray[pinIndex].update();
     }
 
-    bool pinIndexOneState = m_debouncerArray[0].read();;
-    bool pinIndexTwoState = m_debouncerArray[1].read();;
+    bool pinIndexOneState = m_debouncerArray[0].read();
+    bool pinIndexTwoState = m_debouncerArray[1].read();
 
     //  Default value for m_currentState is 0
     if(pinIndexOneState) {

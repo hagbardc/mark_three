@@ -17,7 +17,6 @@ Bounce::Bounce()
 {}
 
 void Bounce::attach(int pin) {
-    Serial.println("Attaching to pin");
     this->pin = pin;
     state = 0;
     if (readCurrentState()) {

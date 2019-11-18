@@ -12,11 +12,12 @@
 
 namespace component {
 
-
 class PotReadout : public component::ComponentBase
 {
 
 public:
+
+    static int NUMBER_OF_SAMPLES;
 
     // e.g. PotReadout pr(A0, 0x73)
     PotReadout(int analogPin, int readoutAddress);
@@ -59,6 +60,9 @@ private:
     unsigned long m_lastUpdateTime;
 
     int m_readoutAddress;
+
+    int *m_sampleArray;
+    int m_sampleArrayIndex;  // How many samples have been read
 
 };
 

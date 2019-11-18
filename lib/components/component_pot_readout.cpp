@@ -2,18 +2,21 @@
 
 #include <Arduino.h>
 
-#define READ_SAMPLES 5
 
 namespace component {
 
+int PotReadout::NUMBER_OF_SAMPLES = 10;
+
 PotReadout::PotReadout(int pinNumber, int readoutAddress) :
     m_pinNumber(pinNumber)
-    , m_minimumIncrement(100)
+    , m_minimumIncrement(11)
     , m_readoutAddress(readoutAddress)
 {
     m_displayMatrix.begin(m_readoutAddress);
     m_displayMatrix.print(0, DEC);
     m_displayMatrix.writeDisplay();
+
+    m_sampleArray = new int[PotReadout::NUMBER_OF_SAMPLES];
 
 }
 
@@ -29,12 +32,15 @@ void PotReadout::step(JsonObject &json)
     // TODO: If this is proving slow, we should do one read per step, and keep an 
     //       internal array over which to do our average (or median)
     int val = 0;
-    for( int ii=0; ii<READ_SAMPLES; ++ii) {
-        val += analogRead(m_pinNumber);
+    for( int ii=0; ii<NUMBER_OF_SAMPLES; ++ii) {
+        val += (analogRead(m_pinNumber)/100)*100;
     }
-    int analogIntVal = val / READ_SAMPLES;
+    int analogIntVal = val / NUMBER_OF_SAMPLES;
 
-    //  Range for analogRead appears to be [0, 4423]
+    //int analogIntValReduced = (analogIntVal) * 10;
+    this->m_currentState = analogIntVal;
+
+/*
     //  We want to the range to be 0 - 9999 (for the digial display)
     if(analogIntVal < 20) {
         this->m_currentState = 0;
@@ -48,7 +54,7 @@ void PotReadout::step(JsonObject &json)
     }
 
     if(this->m_currentState > 9999) { this->m_currentState = 9999; }
-
+*/
 
     if(abs(this->m_currentState - this->m_oldState) < this->m_minimumIncrement) {
         this->m_recentStateChange = false;
