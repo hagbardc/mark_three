@@ -2,18 +2,22 @@
 
 #include <Arduino.h>
 
-#define READ_SAMPLES 5
 
 namespace component {
 
+int PotReadout::NUMBER_OF_SAMPLES = 10;
+
 PotReadout::PotReadout(int pinNumber, int readoutAddress) :
     m_pinNumber(pinNumber)
-    , m_minimumIncrement(100)
+    , m_minimumIncrement(11)
     , m_readoutAddress(readoutAddress)
+    , m_sampleArrayIndex(0)
 {
     m_displayMatrix.begin(m_readoutAddress);
     m_displayMatrix.print(0, DEC);
     m_displayMatrix.writeDisplay();
+
+    m_sampleArray = new int[PotReadout::NUMBER_OF_SAMPLES];
 
 }
 
@@ -26,44 +30,39 @@ void PotReadout::step(JsonObject &json)
     //  value as part of the array-reads.
     //
 
-    // TODO: If this is proving slow, we should do one read per step, and keep an 
-    //       internal array over which to do our average (or median)
-    int val = 0;
-    for( int ii=0; ii<READ_SAMPLES; ++ii) {
-        val += analogRead(m_pinNumber);
-    }
-    int analogIntVal = val / READ_SAMPLES;
+    m_sampleArray[m_sampleArrayIndex] = analogRead(m_pinNumber) / 10;
+    m_sampleArrayIndex++;
 
-    //  Range for analogRead appears to be [0, 4423]
-    //  We want to the range to be 0 - 9999 (for the digial display)
-    if(analogIntVal < 20) {
-        this->m_currentState = 0;
-    } else if(analogIntVal > 1000) {
-        this->m_currentState = 9999;
-    } else {
-
-        // Normalize analog value to [0,1] and scale state
-        double doubleVal = (double)analogIntVal / (double)1024;
-        this->m_currentState = (int)(9999 * doubleVal);
+    //  If we haven't filled up the sample array, just return
+    if(m_sampleArrayIndex != NUMBER_OF_SAMPLES) {
+        this->m_recentStateChange = false;
+        return;
     }
 
-    if(this->m_currentState > 9999) { this->m_currentState = 9999; }
 
+    m_sampleArrayIndex = 0;
+    int newValue = 0;
+    for( int ii = 0; ii<NUMBER_OF_SAMPLES; ++ii) {
+        newValue += m_sampleArray[ii];
+    }
 
+    this->m_currentState = newValue;
     if(abs(this->m_currentState - this->m_oldState) < this->m_minimumIncrement) {
         this->m_recentStateChange = false;
         return;
     }
 
     this->m_recentStateChange = true;
+    this->m_oldState = this->m_currentState;
 
-    m_oldState = this->m_currentState;
-
-    if((m_currentTime - m_lastUpdateTime) > 250) {
-        m_displayMatrix.print(m_currentState, DEC);
+    if((m_currentTime - m_lastUpdateTime) > 200) {
+        int toDisplay = m_currentState * 8;
+        m_displayMatrix.print(toDisplay, DEC);
         m_displayMatrix.writeDisplay();
         m_lastUpdateTime = m_currentTime;
     }
+
+
 
 }
 

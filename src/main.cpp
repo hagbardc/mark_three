@@ -7,6 +7,7 @@
 #include <component_three_way_switch.h>
 #include <component_pot_readout.h>
 #include <component_three_light_toggle.h>
+#include <component_button_pad.h>
 
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
@@ -66,8 +67,11 @@ void setPinStates()
 
 void setupButtonPadArduino()
 {
+    componentManager->addComponent(new ButtonPad());
+
     ///  This is for the 6 3-way switches on the right side (by the 2ndary arduino)
-    int switchArray[2] = {42, 49};
+    int switchArray[2];
+    switchArray[0] = 42;  switchArray[1] = 49;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
     switchArray[0] = 43;  switchArray[1] = 45;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
@@ -80,12 +84,13 @@ void setupButtonPadArduino()
     switchArray[0] = 51;  switchArray[1] = 53;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
-    //componentManager->addComponent(new PotReadout(A0, 0x73));
-    componentManager->addComponent(new PotReadout(A1, 0x74));
+    PotReadout *potA = new PotReadout(A0, 0x73);
+    potA->setComponentName("pot:A");
+    componentManager->addComponent(potA);
 
-    // Toggle switch near potentiometer
-    componentManager->addComponent(new TwoPoleSwitch(6, INPUT_PULLUP));
-
+    PotReadout *potB = new PotReadout(A1, 0x74);
+    potB->setComponentName("pot:B"); 
+    componentManager->addComponent(potB);
 
 }
 
@@ -151,6 +156,12 @@ void setupCenterArduino()
 
 }
 
+void setupButtonPadOnly()
+{
+    componentManager->addComponent(new ButtonPad());
+
+}
+
 
 void setup() {
 
@@ -170,6 +181,11 @@ void setup() {
 
     //setupCenterArduino();
     setupButtonPadArduino();
+<<<<<<< HEAD
+=======
+    //setupButtonPadOnly();
+    Serial.println("Setup complete");
+>>>>>>> mucking_with_potentiometer
 }
 
 void loop() {
