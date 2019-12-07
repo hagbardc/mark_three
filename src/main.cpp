@@ -67,7 +67,10 @@ void setPinStates()
 
 void setupButtonPadArduino()
 {
-    componentManager->addComponent(new ButtonPad());
+
+    ComponentBase * buttonPad = new ButtonPad();
+    buttonPad->setComponentName("buttonpad");
+    componentManager->addComponent(buttonPad);
 
     ///  This is for the 6 3-way switches on the right side (by the 2ndary arduino)
     int switchArray[2];
@@ -91,6 +94,9 @@ void setupButtonPadArduino()
     PotReadout *potB = new PotReadout(A1, 0x74);
     potB->setComponentName("pot:B"); 
     componentManager->addComponent(potB);
+
+    componentManager->addComponent(new TwoPoleSwitch(6, INPUT_PULLUP));
+
 
 }
 
@@ -134,8 +140,10 @@ void setupCenterArduino()
     switchArray[0] = 46;  switchArray[1] = 47;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
-    // Key Switch
-    componentManager->addComponent(new TwoPoleSwitch(48, INPUT_PULLUP));
+    // Key Switch 
+    ComponentBase *keySwitch = new TwoPoleSwitch(48, INPUT_PULLUP);
+    keySwitch->setComponentName("key");
+    componentManager->addComponent(keySwitch);
 
     // Missile command area
     ThreeLightToggle *threeLightToggle = new ThreeLightToggle( 49, 2, 3, 4, 500);
@@ -166,7 +174,7 @@ void setupButtonPadOnly()
 void setup() {
 
     Serial.begin(19200);
-    Serial.println("Starting Setup...");
+    Serial.println("Starting Setup: setupButtonPadArduino");
 
 
 
@@ -180,12 +188,11 @@ void setup() {
     inputArray = new byte[controller->getNumberOfRegisters()];
 
     //setupCenterArduino();
+    //Serial.println("Setup complete: setupCenterArduino");
+
+
     setupButtonPadArduino();
-<<<<<<< HEAD
-=======
-    //setupButtonPadOnly();
-    Serial.println("Setup complete");
->>>>>>> mucking_with_potentiometer
+    Serial.println("Setup complete: setupButtonPadArduino");
 }
 
 void loop() {
