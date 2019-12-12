@@ -45,9 +45,9 @@ int TwoPoleSwitch::getStateChange(JsonObject &jsonState)
     this->m_recentStateChange = false;
 
     if(this->m_isOn) {
-        strncpy(this->m_stateValue, "1", 1);
+        strncpy(this->m_stateValue, "1", 2);
     } else {
-        strncpy(this->m_stateValue, "0", 1);
+        strncpy(this->m_stateValue, "0", 2);
     }
 
     //  "Element" is non-applicable:  This is only used for more complex
@@ -61,7 +61,12 @@ int TwoPoleSwitch::getStateChange(JsonObject &jsonState)
 
 void TwoPoleSwitch::getCurrentState(JsonObject &jsonState)
 {
-    jsonState["state"] = m_isOn;
+    if(this->m_isOn) {
+        strncpy(this->m_stateValue, "1", 2);
+    } else {
+        strncpy(this->m_stateValue, "0", 2);
+    }
+    this->populateStateChange( jsonState, "n/a", "stateread", this->m_stateValue);
 }
 
 void TwoPoleSwitch::step(JsonObject &json)

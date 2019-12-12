@@ -1,8 +1,10 @@
 #include <Arduino.h>
+#include <stdlib.h>
 
 #include <component_manager.h>
 #include <component_base.h>
 #include <component_two_pole_switch.h>
+#include <component_key_switch.h>
 #include <component_three_pole_rocker.h>
 #include <component_three_way_switch.h>
 #include <component_pot_readout.h>
@@ -12,7 +14,7 @@
 #include <controller_access_base.h>
 #include <controller_access_mega2560.h>
 #include <controller_access_util.h>
-
+ 
 using namespace component;
 using namespace controller_access;
 
@@ -25,7 +27,14 @@ byte *inputArray;
 
 unsigned long last_execution = millis();
 
-int readVal;
+
+//  The following block will be used to help configure the various builds, so I can control the 
+//  behavior of the application without changing the code (the BUTTON_PAD_BUILD will only be defined)
+//  for the button pad build
+char center_arduino_name[] ={ "controller01"};
+char button_pad_arduino_name[] ={ "controller02"};
+char *current_target_name = &center_arduino_name[0];
+
 
 
 // We expect pinStart and pinEnd to be the same for most (single signal)
@@ -65,6 +74,8 @@ void setPinStates()
 
 }
 
+
+// Pots are on /dev/ttyACM1
 void setupButtonPadArduino()
 {
 
@@ -87,6 +98,7 @@ void setupButtonPadArduino()
     switchArray[0] = 51;  switchArray[1] = 53;
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
+    
     PotReadout *potA = new PotReadout(A0, 0x73);
     potA->setComponentName("pot:A");
     componentManager->addComponent(potA);
@@ -94,6 +106,7 @@ void setupButtonPadArduino()
     PotReadout *potB = new PotReadout(A1, 0x74);
     potB->setComponentName("pot:B"); 
     componentManager->addComponent(potB);
+    
 
     componentManager->addComponent(new TwoPoleSwitch(6, INPUT_PULLUP));
 
@@ -141,7 +154,7 @@ void setupCenterArduino()
     componentManager->addComponent(new ThreeWaySwitch(switchArray, INPUT_PULLUP));
 
     // Key Switch 
-    ComponentBase *keySwitch = new TwoPoleSwitch(48, INPUT_PULLUP);
+    ComponentBase *keySwitch = new KeySwitch(48, INPUT_PULLUP);
     keySwitch->setComponentName("key");
     componentManager->addComponent(keySwitch);
 
@@ -174,35 +187,49 @@ void setupButtonPadOnly()
 void setup() {
 
     Serial.begin(19200);
-    Serial.println("Starting Setup: setupButtonPadArduino");
+    Serial.print("{\"component\": \"");
+    Serial.print(current_target_name);
+    Serial.println("\": \"system\", \"action\": \"setup_start\", \"element\": \"n/a\", \"value\": \"n/a\"}");
 
-
-
+ 
     //  Allocate memory for component array
     componentManager = new ComponentManager(60);
 
 
     //  Generate a handle to the appropriate microcontroller
     controller = new Mega2560();
-
     inputArray = new byte[controller->getNumberOfRegisters()];
 
-    //setupCenterArduino();
-    //Serial.println("Setup complete: setupCenterArduino");
+    if( current_target_name == center_arduino_name) { 
+        setupCenterArduino();
+    } else {
+        setupButtonPadArduino();
+    }
 
+     for(int ii = 0; ii < componentManager->getNumberOfComponents(); ++ii ) {
 
-    setupButtonPadArduino();
-    Serial.println("Setup complete: setupButtonPadArduino");
+        DynamicJsonDocument jsonDoc(256);
+        JsonObject jsonObject = jsonDoc.to<JsonObject>();
+
+        componentManager->getComponentAtIndex(ii)->getCurrentState(jsonObject);
+        serializeJson(jsonObject, Serial);
+        jsonObject.clear();
+        Serial.println("");
+    }
+
 }
 
 void loop() {
+
+    static bool is_first_loop = true;
+
+
 
     last_execution = millis();
     setPinStates();
 
      for(int ii = 0; ii < componentManager->getNumberOfComponents(); ++ii ) {
 
-        // TODO:  evaluate if this is too time consuming for the loop
         DynamicJsonDocument jsonDoc(256);
         JsonObject jsonObject = jsonDoc.to<JsonObject>();
 
@@ -215,7 +242,14 @@ void loop() {
             Serial.println("");
         }
 
-        componentManager->getComponentAtIndex(ii)->getCurrentState(jsonObject);
+        //componentManager->getComponentAtIndex(ii)->getCurrentState(jsonObject);
+    }
+
+    if(is_first_loop) { 
+        is_first_loop = false;
+        Serial.print("{\"component\": \"");
+        Serial.print(current_target_name);
+        Serial.println("\": \"system\", \"action\": \"setup_complete\", \"element\": \"n/a\", \"value\": \"n/a\"}");
     }
 
 
